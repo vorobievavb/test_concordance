@@ -34,9 +34,8 @@ namespace Test{
             auto newWord = Meta(std::string(input, wordBeginning, wordLength), wordBeginning);
 
             if(wordLength == 0){
-                auto symbol = std::string(input, wordBeginning, 1);
-                if(symbol != std::string(" ") && symbol != std::string("\n")
-                        && symbol != std::string("\t")) {
+                auto symbol = input[wordBeginning];
+                if(symbol != ' ' && symbol != '\n' && symbol != '\t') {
                     auto empl = words.emplace(std::string("."), wordBeginning);
                     if (!empl.second) {
                         auto &punct = const_cast<Meta&>(*empl.first);
@@ -59,13 +58,7 @@ namespace Test{
                 word.lastAppearance = wordBeginning;
             }
             else{
-                auto ignored = false;
-                for(auto& i : ignore)
-                    if (newWord.word == i) {
-                        ignored = true;
-                        break;
-                    }
-                if(!ignored)
+                if(ignore.find(newWord.word) == ignore.end())
                     words.emplace(newWord);
             }
 

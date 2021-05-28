@@ -13,7 +13,7 @@ int main() {
     int order = std::cin.get() - '0';
 
     Test::Concordance concordance(ignoreIn);
-    //Input file should be in the same directory as the executable, otherwise provide the full path
+
     concordance.Execute(std::string("in.txt"), static_cast<Test::Order>(order));
     return 0;
 }

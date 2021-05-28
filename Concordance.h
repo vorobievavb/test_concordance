@@ -62,9 +62,12 @@ namespace Test {
                     return std::hash<std::string>()(meta.word);
                 }
             };
+
         };
+
     private:
-        std::string separators = R"( ,!?.-;:'"())"+std::string("\n\t");
+        //Default C list of characters cosidered punctuation + space + tab + new line
+        std::string separators = R"( !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~)"+std::string("\n\t");
 
         std::unordered_set<std::string> ignore;
         std::unordered_set<Meta, Meta::CustomHash> words;
