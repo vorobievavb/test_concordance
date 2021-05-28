@@ -12,7 +12,7 @@
 namespace Test {
     //Sorting order
     enum struct Order{
-       Alphabetical,
+       Alphabetical = 0,
        Quantitative,
        FirstAppearance,
        MeanDistance      //If the word appears in text only once, mean distance is considered to be zero
