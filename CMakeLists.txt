@@ -1,4 +1,4 @@
-project(untitled)
+project(test_concordance)
 
 set(CMAKE_CXX_STANDARD 14)
 

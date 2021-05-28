@@ -10,7 +10,7 @@ int main() {
                  "1 -   By quantity,\n"
                  "2 -   Order of first appearance,\n"
                  "3 -   By mean distance between words." << std::endl;
-    int order = getchar() - '0';
+    int order = std::cin.get() - '0';
 
     Test::Concordance concordance(ignoreIn);
     //Input file should be in the same directory as the executable, otherwise provide the full path
