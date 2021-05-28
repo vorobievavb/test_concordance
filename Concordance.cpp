@@ -39,7 +39,7 @@ namespace Test{
                         && symbol != std::string("\t")) {
                     auto empl = words.emplace(std::string("."), wordBeginning);
                     if (!empl.second) {
-                        auto punct = *empl.first;
+                        auto &punct = const_cast<Meta&>(*empl.first);
                         punct.quantity++;
                         punct.meanDistance = (punct.meanDistance * (punct.quantity - 1) +
                                               wordBeginning - punct.lastAppearance) / punct.quantity;
@@ -52,7 +52,7 @@ namespace Test{
 
             auto find = words.find(newWord);
             if(find != words.end()){
-                auto word = *find;
+                auto& word = const_cast<Meta&>(*find);
                 word.quantity++;
                 word.meanDistance = (word.meanDistance * (word.quantity - 1) +
                                       wordBeginning - word.lastAppearance) / word.quantity;
