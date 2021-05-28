@@ -14,6 +14,10 @@ namespace Test{
         uint32_t wordBeginning = 0;
         while(wordBeginning < ignoreIn.length()) {
             auto wordLength = ignoreIn.find(' ');
+            if(wordLength == std::string::npos)
+                wordLength = ignoreIn.length();
+
+            wordLength -= wordBeginning;
             ignore.emplace(ignoreIn, wordBeginning, wordLength);
             wordBeginning += wordLength + 1;
         }
@@ -84,7 +88,7 @@ namespace Test{
             inputFile.close();
         }
         else
-            std::cout << "Could not open inout file" << std::endl;
+            std::cout << "Could not open input file" << std::endl;
         return input;
     }
 
@@ -105,11 +109,21 @@ namespace Test{
     template<>
     bool Concordance::Meta::Compare<Order::Alphabetical>(const Concordance::Meta &meta1, const Concordance::Meta &meta2){
         //Converting to lowercase to preserve alphabetical order over upper and lower case order
+        //TODO: figure out why std::trasform doesn't work
         std::string temp1, temp2;
-        std::transform(meta1.word.begin(), meta1.word.end(), temp1.begin(),
-                       [](unsigned char c){ return std::tolower(c); });
-        std::transform(meta2.word.begin(), meta2.word.end(), temp2.begin(),
-                       [](unsigned char c){ return std::tolower(c); });
+
+        for(auto& c : meta1.word)
+            temp1.push_back(std::tolower(c));
+        for(auto& c : meta2.word)
+            temp2.push_back(std::tolower(c));
+
+//        temp1.reserve(meta1.word.length());
+//        temp2.reserve(meta2.word.length());
+//        std::transform(meta1.word.begin(), meta1.word.end(), temp1.begin(),
+//                       [](unsigned char c){ return std::tolower(c); });
+//        std::cout << meta1.word;
+//        std::transform(meta2.word.begin(), meta2.word.end(), temp2.begin(),
+//                       [](unsigned char c){ return std::tolower(c); });
         return temp1 < temp2;
     }
 

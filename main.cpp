@@ -2,7 +2,7 @@
 #include "Concordance.h"
 
 int main() {
-    std::cout << "Please print words to ignore separate by a space:" << std::endl;
+    std::cout << "Please print words to ignore separated by spaces:" << std::endl;
     std::string ignoreIn;
     std::getline(std::cin, ignoreIn);
     Test::Concordance concordance(ignoreIn);
