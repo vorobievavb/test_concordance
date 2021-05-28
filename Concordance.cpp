@@ -35,7 +35,8 @@ namespace Test{
 
             if(wordLength == 0){
                 auto symbol = std::string(input, wordBeginning, 1);
-                if(symbol != std::string(" ")) {
+                if(symbol != std::string(" ") && symbol != std::string("\n")
+                        && symbol != std::string("\t")) {
                     auto empl = words.emplace(std::string("."), wordBeginning);
                     if (!empl.second) {
                         auto punct = *empl.first;

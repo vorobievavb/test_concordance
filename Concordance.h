@@ -29,7 +29,8 @@ namespace Test {
         static std::string ReadFile(std::string& fileName);
 
         //Separates input text into unique words and fills metadata.
-        //A word is defined as a string of characters separated by the beginning of the string, a space or the end of the string from either side.
+        //A word is defined as a string of characters with the beginning of the text,
+        //a space, a tab, the end of the line or the end of the text from either side.
         //All punctuation symbols are considered to be the same word encoded as a dot symbol.
         void ParseText(std::string &);
 
@@ -63,7 +64,7 @@ namespace Test {
             };
         };
     private:
-        std::string separators = R"( ,!?.-;:'"())";
+        std::string separators = R"( ,!?.-;:'"())"+std::string("\n\t");
 
         std::unordered_set<std::string> ignore;
         std::unordered_set<Meta, Meta::CustomHash> words;
