@@ -10,17 +10,9 @@
 #include "Concordance.h"
 
 namespace Test{
-    Concordance::Concordance(std::string &ignoreIn) {
-        uint32_t wordBeginning = 0;
-        while(wordBeginning < ignoreIn.length()) {
-            auto wordLength = ignoreIn.find(' ');
-            if(wordLength == std::string::npos)
-                wordLength = ignoreIn.length();
-
-            wordLength -= wordBeginning;
-            ignore.emplace(ignoreIn, wordBeginning, wordLength);
-            wordBeginning += wordLength + 1;
-        }
+    Concordance::Concordance(IgnoreSet &&ignore):
+        ignore(ignore)
+    {
     }
 
     void Concordance::ParseText(std::string &input) {
@@ -39,10 +31,7 @@ namespace Test{
                     auto empl = words.emplace(std::string("."), wordBeginning);
                     if (!empl.second) {
                         auto &punct = const_cast<Meta&>(*empl.first);
-                        punct.quantity++;
-                        punct.meanDistance = (punct.meanDistance * (punct.quantity - 1) +
-                                              wordBeginning - punct.lastAppearance) / punct.quantity;
-                        punct.lastAppearance = wordBeginning;
+                        punct.Update(wordBeginning);
                     }
                 }
                 wordBeginning += wordLength + 1;
@@ -52,10 +41,7 @@ namespace Test{
             auto find = words.find(newWord);
             if(find != words.end()){
                 auto& word = const_cast<Meta&>(*find);
-                word.quantity++;
-                word.meanDistance = (word.meanDistance * (word.quantity - 1) +
-                                      wordBeginning - word.lastAppearance) / word.quantity;
-                word.lastAppearance = wordBeginning;
+                word.Update(wordBeginning);
             }
             else{
                 if(ignore.find(newWord.word) == ignore.end())
@@ -67,13 +53,13 @@ namespace Test{
 
     }
 
-    void Concordance::Execute(std::string inputFile, Order order) {
+    void Concordance::Execute(const std::string& inputFile, Order order) {
         auto input = ReadFile(inputFile);
         ParseText(input);
         WriteSorted(order);
     }
 
-    std::string Concordance::ReadFile(std::string &fileName) {
+    std::string Concordance::ReadFile(const std::string &fileName) {
         std::ifstream inputFile(fileName);
         std::string input;
         if(inputFile.is_open()){
@@ -95,10 +81,18 @@ namespace Test{
     {
     }
 
+    void Concordance::Meta::Update(uint32_t newWordBeginning) {
+        quantity++;
+        meanDistance = (meanDistance * (quantity - 1) +
+                        newWordBeginning - lastAppearance) / quantity;
+        lastAppearance = newWordBeginning;
+    }
+
     template<Order T>
     bool Concordance::Meta::Compare(const Concordance::Meta &meta1, const Concordance::Meta &meta2) {
         return false;
     }
+
 
     template<>
     bool Concordance::Meta::Compare<Order::Alphabetical>(const Concordance::Meta &meta1, const Concordance::Meta &meta2){

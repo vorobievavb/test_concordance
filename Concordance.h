@@ -10,6 +10,8 @@
 #include <unordered_set>
 
 namespace Test {
+    using IgnoreSet = std::unordered_set<std::string>;
+
     //Sorting order
     enum struct Order{
        Alphabetical = 0,
@@ -21,12 +23,12 @@ namespace Test {
     class Concordance {
     public:
         //Constructor receives an std::string with words to ignore separated by a space
-        explicit Concordance(std::string&);
+        explicit Concordance(IgnoreSet&&);
         ~Concordance() = default;
 
         //Main method, pass input file name and desired order
-        void Execute(std::string fileName, Order);
-        static std::string ReadFile(std::string& fileName);
+        void Execute(const std::string& fileName, Order);
+        static std::string ReadFile(const std::string& fileName);
 
         //Separates input text into unique words and fills metadata.
         //A word is defined as a string of characters with the beginning of the text,
@@ -63,13 +65,14 @@ namespace Test {
                 }
             };
 
+            void Update(uint32_t);
         };
 
     private:
         //Default C list of characters cosidered punctuation + space + tab + new line
         std::string separators = R"( !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~)"+std::string("\n\t");
 
-        std::unordered_set<std::string> ignore;
+        IgnoreSet ignore;
         std::unordered_set<Meta, Meta::CustomHash> words;
 
     }; //class Concordance
