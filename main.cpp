@@ -2,6 +2,7 @@
 #include "Concordance.h"
 
 Test::IgnoreSet GetIgnore(){
+    std::cout << "Please print words to ignore separated by spaces:" << std::endl;
     Test::IgnoreSet ignore;
     unsigned char ch;
     std::string newIgnore;
@@ -39,8 +40,6 @@ int GetOrder(){
 }
 
 int main() {
-    std::cout << "Please print words to ignore separated by spaces:" << std::endl;
-
     Test::Concordance concordance(std::forward<Test::IgnoreSet>(GetIgnore()));
 
     int order = GetOrder();
