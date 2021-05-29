@@ -83,8 +83,8 @@ namespace Test{
 
     void Concordance::Meta::Update(uint32_t newWordBeginning) {
         quantity++;
-        meanDistance = (meanDistance * (quantity - 1) +
-                        newWordBeginning - lastAppearance) / quantity;
+        meanDistance = (meanDistance * (quantity - 2) +
+                        newWordBeginning - lastAppearance - 1) / (quantity - 1);
         lastAppearance = newWordBeginning;
     }
 
